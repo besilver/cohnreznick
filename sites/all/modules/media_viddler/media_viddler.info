@@ -1,0 +1,13 @@
+name = Media: Viddler
+description = Embedded Audio Field provider file for viddler.com.
+core = 6.x
+dependencies[] = emvideo
+package = Media
+
+
+; Information added by drupal.org packaging script on 2011-10-23
+version = "6.x-1.0-beta3"
+core = "6.x"
+project = "media_viddler"
+datestamp = "1319390136"
+

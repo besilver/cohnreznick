@@ -1,0 +1,66 @@
+<?php
+
+/**
+ *  @file
+ *  Embedded Video Field provider file for viddler.com.
+ */
+
+function media_viddler_emfield_providers($module, $provider = NULL) {
+  if ($module == 'emvideo') {
+    return drupal_system_listing("$provider\.inc$", drupal_get_path('module', 'media_viddler') ."/providers", 'name', 0);
+  }
+}
+
+/**
+ * Retrieve the embed url for a viddler video from its data value 
+ *
+ * @param $data
+ *   Video data
+ */
+function media_viddler_embedurl_from_data($data) {
+  // If the data comes from the current version of viddler's oEmbed service then
+  // we need to get the url from the embed code
+  $url = NULL;
+  if (isset($data['OEMBED']['HTML'][0])) {
+    $url = _media_viddler_embedurl_from_embed_code($data);
+  } // end if the data comes from the current version
+  else if (isset($data['OEMBED']
+      ['HTML']['clsid:D27CDB6E-AE6D-11cf-96B8-444553540000']['PARAM'][1]
+      ['VALUE'])) {
+    // This is here for legacy support only
+    $url = $data['OEMBED']['HTML']['clsid:D27CDB6E-AE6D-11cf-96B8-444553540000']
+      ['PARAM'][1]['VALUE'];
+  } // end else the data comes from the old version
+
+  return $url;
+} // end function media_viddler_embedurl_from_data()
+
+/**
+ * Returns the embed url for a viddler video from its embed code
+ *
+ * @param $data
+ *   Video data
+ */
+function _media_viddler_embedurl_from_embed_code($data) {
+  $url = NULL;
+  if (preg_match('/embed src="(.+?)"/', $data['OEMBED']['HTML'][0], $matches)) {
+    $url = $matches[1];
+  }
+
+  return $url;
+} // end function _media_viddler_embedurl_from_embed_code()
+
+/**
+* Retrieve the video id for a viddler video from its data value
+*
+* @param $data
+*   Video data
+*/
+function media_viddler_id_from_embedurl($url) {
+  $id = NULL;
+  if (preg_match('/\/(\w*?)\/$/', $url, $matches)) {
+    $id = $matches[1];
+  }
+
+  return $id;
+} // end function media_viddler_name_from_data()

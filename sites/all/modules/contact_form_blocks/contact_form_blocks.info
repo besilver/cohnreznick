@@ -1,0 +1,11 @@
+name = "Contact Form Blocks"
+description = "Makes your site-wide contact forms available as Drupal Blocks."
+dependencies[] = contact
+core = 6.x
+
+; Information added by drupal.org packaging script on 2011-09-07
+version = "6.x-1.2"
+core = "6.x"
+project = "contact_form_blocks"
+datestamp = "1315384624"
+

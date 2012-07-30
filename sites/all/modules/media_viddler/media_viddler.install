@@ -1,0 +1,110 @@
+<?php
+
+/**
+ * @file
+ * Install, uninstall and update hooks for media viddler
+ */
+
+/**
+ * Update storage of existing values, adding emvideo_viddler_embedurl index
+ */
+function media_viddler_update_6000() {
+  // Start by getting all emvideo fields
+  $field_result = db_query('SELECT field_name FROM {content_node_field} ' .
+    'WHERE type = \'%s\'', 'emvideo');
+
+  // Iterate over each of the fields
+  $field = db_fetch_array($field_result);
+  while (FALSE !== $field) {
+    // Get the instances for this field
+    $instance_result =
+      db_query('SELECT type_name FROM {content_node_field_instance} ' .
+        'WHERE field_name = \'%s\'', $field['field_name']);
+
+    // Iterate over each of the instances
+    $instance = db_fetch_array($instance_result);
+    while (FALSE !== $instance) {
+      // Get the data for each field that's storing a viddler video
+      $table = 'content_type_' . $instance['type_name'];
+      $data_column = $field['field_name'] . '_data';
+      $data_result = db_query('SELECT nid, vid, ' . $data_column . ' data ' .
+        'FROM {' . $table . '} ' .
+        'WHERE ' . $field['field_name'] . '_provider = \'%s\'', 'viddler');
+
+      // Iterate over the data
+      $field_data = db_fetch_array($data_result);
+      while (FALSE !== $field_data) {
+        // If the embed url has not been set for this field then we need to set
+        // it to the correct value
+        $data = unserialize($field_data['data']);
+        if (empty($data['emvideo_viddler_embedurl'])) {
+          $data['emvideo_viddler_embedurl'] =
+            media_viddler_embedurl_from_data($data);
+
+          // Update the data for this field value
+          $result = db_query('UPDATE {' . $table . '} ' .
+              'SET ' . $data_column . ' = \'%s\' WHERE nid = %d AND vid = %d',
+            serialize($data), $field_data['nid'], $field_data['vid']);
+        } // end if we need to set the embed url
+
+        $field_data = db_fetch_array($data_result);
+      } // end for each data
+
+      $instance = db_fetch_array($instance_result);
+    } // end for each instance
+
+    $field = db_fetch_array($field_result);
+  } // end for each field
+} // end function media_viddler_update_6000()
+
+/**
+ * Update storage of existing values, adding emvideo_viddler_id index
+ */
+function media_viddler_update_6001() {
+  // Start by getting all emvideo fields
+  $field_result = db_query('SELECT field_name FROM {content_node_field} ' .
+    'WHERE type = \'%s\'', 'emvideo');
+
+  // Iterate over each of the fields
+  $field = db_fetch_array($field_result);
+  while (FALSE !== $field) {
+    // Get the instances for this field
+    $instance_result =
+    db_query('SELECT type_name FROM {content_node_field_instance} ' .
+        'WHERE field_name = \'%s\'', $field['field_name']);
+
+    // Iterate over each of the instances
+    $instance = db_fetch_array($instance_result);
+    while (FALSE !== $instance) {
+      // Get the data for each field that's storing a viddler video
+      $table = 'content_type_' . $instance['type_name'];
+      $data_column = $field['field_name'] . '_data';
+      $data_result = db_query('SELECT nid, vid, ' . $data_column . ' data ' .
+        'FROM {' . $table . '} ' .
+        'WHERE ' . $field['field_name'] . '_provider = \'%s\'', 'viddler');
+
+      // Iterate over the data
+      $field_data = db_fetch_array($data_result);
+      while (FALSE !== $field_data) {
+        // If the embed url has not been set for this field then we need to set
+        // it to the correct value
+        $data = unserialize($field_data['data']);
+        if (empty($data['emvideo_viddler_id'])) {
+          $data['emvideo_viddler_id'] =
+            media_viddler_id_from_embedurl($data['emvideo_viddler_embedurl']);
+
+          // Update the data for this field value
+          $result = db_query('UPDATE {' . $table . '} ' .
+              'SET ' . $data_column . ' = \'%s\' WHERE nid = %d AND vid = %d',
+          serialize($data), $field_data['nid'], $field_data['vid']);
+        } // end if we need to set the embed url
+
+        $field_data = db_fetch_array($data_result);
+      } // end for each data
+
+      $instance = db_fetch_array($instance_result);
+    } // end for each instance
+
+    $field = db_fetch_array($field_result);
+  } // end for each field
+} // end function media_viddler_update_6000()
