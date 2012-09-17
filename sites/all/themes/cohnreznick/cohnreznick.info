@@ -1,0 +1,28 @@
+name = Cohnreznick
+description = Main theme for Cohnreznick
+core = 6.x
+engine = phptemplate
+version = 6.x-1.01
+
+screenshot = images/screenshot.png
+ 
+regions[main_menu] = Main menu 
+regions[bottom_menu] = Secondary links
+regions[top_menu] = Top menu
+regions[pretext] = Pretext
+regions[content] = Content
+regions[fourhorimg] = Four horizontal images
+regions[threehorimg] = Three horizontal images
+regions[jcarousel] = Jquery carousel
+regions[follow_us_left] = Follow us (left)
+regions[follow_us_right] = Follow us (right)
+regions[follow_us_careers] = Follow us (on Careers)
+regions[sliderimgtop] = Slider with a picture at the top and bottom of the text
+regions[workus] = Working us
+regions[psearch] = People search
+
+
+features[] = logo
+features[] = favicon
+
+stylesheets[all][] = css/style.css

@@ -1,0 +1,20 @@
+.mjc-add {
+	margin: 20px;
+}
+
+.mjc-op {
+	list-style-type: none;
+}
+
+.mjc-op li {
+	display: inline-block; 
+    background: none !important;
+}
+
+.mjc-disabled {
+	color: #ADADAD !important;
+}
+
+textarea {
+	width: 430px !important;
+}

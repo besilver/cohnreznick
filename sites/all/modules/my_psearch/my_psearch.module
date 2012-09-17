@@ -1,0 +1,127 @@
+<?php 
+
+define(TAXONOMY_INDUSTRIES_ID, 4);
+define(TAXONOMY_LOCATIONS_ID, 7);
+define(EXCEPTIONS, true);
+
+function my_psearch_block($op = 'list', $delta = 0, $edit = array()){
+    
+   if ($op == 'list') {
+	  
+	  $blocks[0] = array(
+         'info' => t('My module - psearch'), 
+         'weight' => 0, 
+         'status' => 1, 
+         'region' => 'psearch',
+      );
+	  
+	   return $blocks;
+   }
+   elseif ($op == 'view') {
+   	
+   $people = my_psearch_getPeopleNodes();
+
+  // echo '<pre>';
+ //  print_r(my_psearch_getServices());
+
+	  $block = array(
+         'subject' => NULL, 
+         'content' => 'Some content',
+         'industries' => my_psearch_getIndustries(),
+         'locations' => my_psearch_getLocations(),
+         'services' => my_psearch_getServices(),
+      );
+	  
+	  return $block;
+   }
+
+}
+
+function my_psearch_getNodeFieldValue($node, $field_name) {
+
+	 if (count($node->{$field_name}) == 1)
+	    return $node->{$field_name}[0]['value'];
+	 elseif(count($node->{$field_name}) > 1) {
+	 	$res = array();
+	 	for($i = 0; $i < count($node->{$field_name}); $i++)
+		  $res[$i] = $node->{$field_name}[$i]['value'];
+		return $res;
+	 }
+	 elseif(count($node->{$field_name}) == 0) {
+	 	return NULL;
+	 }
+     
+}
+
+function my_psearch_getIndustries() {
+	
+	$industries = array();
+	
+    $query_str = "SELECT * FROM {term_data} td";
+	if(EXCEPTIONS == true)
+	      $query_str .= " INNER JOIN {term_node} tn ON tn.tid = td.tid";
+	$query_str .= " WHERE td.vid=%d";
+	$query_str .= " ORDER BY td.weight";
+
+    $query_get_industries = db_query($query_str, TAXONOMY_INDUSTRIES_ID);
+	while($result_get_industries = db_fetch_object($query_get_industries)) {
+		 $industries[] = $result_get_industries;
+	}
+	return $industries;
+	
+}
+
+function my_psearch_getLocations() {
+	
+	$locations = array();
+	
+    $query_str = "SELECT * FROM {term_data} td";
+	if(EXCEPTIONS == true)
+	      $query_str .= " INNER JOIN {term_node} tn ON tn.tid = td.tid";
+	$query_str .= " WHERE td.vid=%d";
+	$query_str .= " ORDER BY td.weight";
+
+    $query_get_locations = db_query($query_str, TAXONOMY_LOCATIONS_ID);
+	while($result_get_locations = db_fetch_object($query_get_locations)) {
+		 $locations[] = $result_get_locations;
+	}
+	return $locations;
+	
+}
+
+function my_psearch_getServices() {
+	
+	$services = array();
+	
+	$query_str = "SELECT n.nid, n.title FROM {node} n";
+	if(EXCEPTIONS == true)
+          $query_str .= " INNER JOIN {content_field_related_services} c  ON c.field_related_services_nid = n.nid";
+    $query_str .= " WHERE n.status=1 AND n.type='services'";
+    $query_str .= " ORDER BY n.title";
+
+    $query_get_services = db_query($query_str);
+	while($result_get_services = db_fetch_object($query_get_services)) {
+		 $services[] = $result_get_services;
+	}
+	return $services;
+	
+}
+
+function my_psearch_getPeopleNodes() {
+	
+	$query_people_nid = db_query("SELECT nid FROM `node` WHERE type='people' AND status=1");
+	$people_nid = array();
+	while($nid = db_result($query_people_nid)) {
+		 $people_nid[] = $nid;
+	}
+	
+	$people_nodes = array();
+	for($i = 0; $i < count($people_nid); $i++) {
+		//if($people_nid[$i] == 580 || $people_nid[$i] == 577)
+		if($people_nid[$i] == 577)
+		$people_nodes[$i] = node_load($people_nid[$i]);
+	}
+	
+	return $people_nodes;
+	
+}

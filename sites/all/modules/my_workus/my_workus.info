@@ -1,0 +1,5 @@
+name = My Working Us module
+description = Filling content retractable unit
+core = 6.x
+version = "6.x-1.0"
+package = "My development"

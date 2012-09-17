@@ -1,0 +1,5 @@
+name = My Jquery Carousel 
+description = Jquery Carousel Blocks for text bodies 
+core = 6.x
+version = "6.x-1.0"
+package = "My development"

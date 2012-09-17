@@ -1,0 +1,20 @@
+.msit-add {
+	margin: 20px;
+}
+
+.msit-op {
+	list-style-type: none;
+}
+
+.msit-op li {
+	display: inline-block; 
+    background: none !important;
+}
+
+.msit-disabled {
+	color: #ADADAD !important;
+}
+
+textarea {
+	width: 430px !important;
+}

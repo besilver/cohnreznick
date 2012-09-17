@@ -1,0 +1,24 @@
+<?php
+
+/**
+ * @file
+ * The .install file of the jcarousel block module, set a few default
+ * values for the module.
+ */
+
+
+function jcarousel_block_install() {
+  variable_set('jcarousel_block_imagefield_name', 'field_slideshow_images');
+  variable_set('jcarousel_block_imagefield_type', 'imceimage');
+  variable_set('jcarousel_block_skin', 'ie7');
+  variable_set('jcarousel_block_block_list_title', t('jcarousel block'));
+  variable_set('jcarousel_block_block_title', t('additional images'));
+}
+
+
+function jcarousel_block_uninstall() {
+  // Delete all the jcarousel_block variables and then clear the variable cache  
+  db_query("DELETE FROM {variable} WHERE name LIKE 'jcarousel_block_%'");
+  cache_clear_all('variables', 'cache');
+}
+

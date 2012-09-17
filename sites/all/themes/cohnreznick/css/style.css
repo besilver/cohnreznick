@@ -1,0 +1,25 @@
+li.collapsed {
+	list-style-image: none !important;
+	list-style-type: none;
+}
+
+.cursive {
+	font-style: italic;
+}
+
+form#search_people select {
+	width: 140px;
+}
+
+form#search_people input[type="text"] {
+	min-width:140px;
+	display: inline-block;
+	margin:0 9px;
+	border:solid 1px #d7d2cf;
+	background:#fff;
+	font-size:12px;
+	color: #666666;
+	padding:8px;
+	width: 140px;
+}
+

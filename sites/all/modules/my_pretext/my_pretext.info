@@ -1,0 +1,5 @@
+name = My Introduction text 
+description = Introduction text
+core = 6.x
+version = "6.x-1.0"
+package = "My development"

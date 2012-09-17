@@ -1,0 +1,167 @@
+<?php
+
+define(MODULE_TITLE_PRETEXT, 'My Introduction text');
+define(BLOCK_NAME_PRETEXT, 'Introduction text Block');
+define(MODULE_NAME_PRETEXT, 'my_pretext');
+define(REGION_PRETEXT, 'pretext');
+define(STYLE_PRETEXT, 'mp');
+define(DESCRIPTION_PRETEXT, 'Create Introduction text blocks with path, title, body.');
+
+
+function my_pretext_init() {
+	
+	drupal_add_css(drupal_get_path('module', MODULE_NAME_PRETEXT) . '/'.MODULE_NAME_PRETEXT.'.css');
+	
+}
+
+function my_pretext_menu() {
+   $items = array();
+   
+   $items['admin/build/'.MODULE_NAME_PRETEXT.''] = array(
+   'title' => t(MODULE_TITLE_PRETEXT),
+   'description' => t(DESCRIPTION_PRETEXT),
+   'page callback' => MODULE_NAME_PRETEXT.'_admin',
+   'file' => MODULE_NAME_PRETEXT.'.admin.inc',
+   'access callback' => TRUE
+   );
+   
+   $items['admin/build/'.MODULE_NAME_PRETEXT.'/add'] = array(
+   'title' => t('Add new '.BLOCK_NAME_PRETEXT.''),
+   'type' => MENU_SUGGESTED_ITEM,
+   'weight' => 1,
+   'page callback' => 'drupal_get_form',
+   'page arguments' => array(MODULE_NAME_PRETEXT.'_add_ob'),
+   'file' => MODULE_NAME_PRETEXT.'.admin.inc',
+   'access callback' => TRUE
+   );
+   
+   $items['admin/build/'.MODULE_NAME_PRETEXT.'/edit/%'] = array(
+    'title' => 'Editing of the block',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array(MODULE_NAME_PRETEXT.'_ob_edit', 4),
+    'access arguments' => array(4),
+    'access callback' => TRUE,
+    'file' => MODULE_NAME_PRETEXT.'.admin.inc',
+    'type' => MENU_SUGGESTED_ITEM,
+    'weight' => 1,
+   );
+   
+   $items['admin/build/'.MODULE_NAME_PRETEXT.'/enable/%'] = array(
+    'title' => 'Enable the block',
+    'page callback' => MODULE_NAME_PRETEXT.'_ob_enable',
+    'page arguments' => array(4),
+    'access arguments' => array(4),
+    'access callback' => TRUE,
+    'type' => MENU_SUGGESTED_ITEM,
+    'weight' => 3,
+   );
+   
+   $items['admin/build/'.MODULE_NAME_PRETEXT.'/delete/%'] = array(
+    'title' => 'Deleting of the block',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array(MODULE_NAME_PRETEXT.'_ob_delete', 4),
+    'access arguments' => array(4),
+    'access callback' => TRUE,
+    'type' => MENU_SUGGESTED_ITEM,
+    'weight' => 4,
+   );
+   
+   return $items;
+}
+ 
+function my_pretext_ob_enable($ob) {
+	
+	$result = db_query("SELECT enabled FROM {".MODULE_NAME_PRETEXT."} WHERE id=%d", $ob);
+	$status = db_result($result);
+	$need_status = 1 - $status;
+	db_query("UPDATE {".MODULE_NAME_PRETEXT."} SET enabled=%d WHERE id=%d", $need_status, $ob);
+	drupal_goto('admin/build/'.MODULE_NAME_PRETEXT.'');
+	
+}
+
+function my_pretext_ob_delete($form_state, $ob) {
+	
+	$result = db_query("SELECT title FROM {".MODULE_NAME_PRETEXT."} WHERE id=%d", $ob);
+	$title = db_result($result);
+	
+	$form['question'] = array(
+	  '#title' => 'Do you realy want to delete '.BLOCK_NAME_PRETEXT.' "'.$title.'" ?', 
+      '#type' => 'item',
+    );
+	
+	$form['id'] = array(
+      '#type' => 'hidden',
+      '#value' => $ob,
+    );
+	
+	$form['submit'] = array(
+      '#type' => 'submit',
+      '#value' => t('Delete'),
+    );
+	
+	return $form;
+	
+}
+
+
+function my_pretext_ob_delete_submit($form, &$form_state) {
+		
+	$form_values = $form_state['values'];
+	db_query("DELETE FROM {".MODULE_NAME_PRETEXT."} WHERE id=%d", $form_values['id']);
+	drupal_goto('admin/build/'.MODULE_NAME_PRETEXT.'');
+	
+}
+
+
+function my_pretext_block($op = 'list', $delta = 0, $edit = array()){
+    
+   if ($op == 'list') {
+	   
+	  $blocks[0] = array(
+         'info' => t('My module - '.MODULE_NAME_PRETEXT), 
+         'weight' => 0, 
+         'status' => 1, 
+         'region' => REGION_PRETEXT,
+      );
+	  
+	   return $blocks;
+   }
+   elseif ($op == 'view') {
+   	
+	  $blocks = array();
+   	
+	  $ob_current = my_pretext_db_get_current_ob();
+	   
+	  if($ob_current) {
+       
+	       $title =  $ob_current->title;
+		   $body =  $ob_current->body;
+	  	  
+	  	  $block = array(
+	         'subject' => NULL, 
+	         'content' => 'Some content',
+	         'title' => $title,
+	         'body' => $body,
+          );
+	  
+	      return $block;
+	  }
+	  else return NULL;
+
+   }
+
+}
+
+function my_pretext_db_get_current_ob() {
+	
+	$request_uri = (strlen(request_uri()) > 1 && substr(request_uri(),0,1) == '/') ? substr(request_uri(),1) : request_uri();
+    $current_uri = substr(request_uri(),0,1) == '/' ? substr(request_uri(),1) : request_uri();
+    $current_uri = request_uri() == '/' ? '<front>' : $current_uri; 
+    $current_uri = drupal_lookup_path('source', $current_uri ) ? drupal_lookup_path('source', $current_uri ) : $current_uri;
+	
+	$result = db_query("SELECT * FROM {".MODULE_NAME_PRETEXT."} mob WHERE (display='%s' OR display='%s') AND enabled=1", $request_uri, $current_uri);
+    $record = db_fetch_object($result) ;
+
+    return  $record;
+	
+}

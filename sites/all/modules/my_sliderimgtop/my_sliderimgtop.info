@@ -1,0 +1,5 @@
+name = My Slider with an image at the top
+description = Slider with an image at the top and bottom of the text
+core = 6.x
+version = "6.x-1.0"
+package = "My development"

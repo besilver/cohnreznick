@@ -1,0 +1,11 @@
+name = jcarousel block
+description = Enables a configurable block showing sliding images using jcarousel
+core = 6.x
+
+
+; Information added by drupal.org packaging script on 2011-03-02
+version = "6.x-1.8"
+core = "6.x"
+project = "jcarousel_block"
+datestamp = "1299027968"
+

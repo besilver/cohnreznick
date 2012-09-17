@@ -1,0 +1,24 @@
+<?php
+function my_follow_us_install() {
+	drupal_install_schema('my_follow_us');
+}
+
+function my_follow_us_uninstall() {
+    drupal_uninstall_schema('my_follow_us');
+}
+
+function my_follow_us_schema() {
+	
+   $schema['my_follow_us'] = array(
+    'fields' => array(
+      'id' => array('type' => 'serial', 'not null' => TRUE),
+      'facebook_link' => array('type' => 'varchar', 'length' => 255, 'not null' => FALSE),
+      'twitter_link' => array('type' => 'varchar', 'length' => 255, 'not null' => FALSE),
+      'linkedin_link' => array('type' => 'varchar', 'length' => 255, 'not null' => FALSE),
+      'rss_link' => array('type' => 'varchar', 'length' => 255, 'not null' => FALSE),
+    ),
+   'primary key' => array('id'),
+   );
+   
+   return $schema;
+}

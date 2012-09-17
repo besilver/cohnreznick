@@ -1,0 +1,40 @@
+<?php
+
+function my_workus_install() {
+	drupal_install_schema('my_workus');
+	drupal_install_schema('my_workus_items');
+}
+
+function my_workus_uninstall() {
+    drupal_uninstall_schema('my_workus');
+	drupal_uninstall_schema('my_workus_items');
+}
+
+function my_workus_schema() {
+	
+   $schema['my_workus'] = array(
+    'fields' => array(
+      'id' => array('type' => 'serial', 'not null' => TRUE),
+      'title' => array('type' => 'varchar', 'length' => 255, 'not null' => TRUE),
+      'video_link' => array('type' => 'varchar', 'length' => 255, 'not null' => TRUE),
+      'body' => array('type' => 'text', 'length' => 1024, 'not null' => FALSE),
+      'link_type' => array('type' => 'int',  'not null' => TRUE),
+    ),
+   'primary key' => array('id'),
+   );
+   
+   $schema['my_workus_items'] = array(
+    'fields' => array(
+      'id' => array('type' => 'serial', 'not null' => TRUE),
+      'title' => array('type' => 'varchar', 'length' => 255, 'not null' => TRUE),
+      'body' => array('type' => 'text', 'length' => 1024, 'not null' => TRUE),
+      'link_title' => array('type' => 'varchar', 'length' => 255, 'not null' => FALSE),
+      'link_url' => array('type' => 'varchar', 'length' => 255, 'not null' => FALSE),
+      'weight' => array('type' => 'int', 'default' => 0, 'not null' => TRUE),
+      'enabled' => array('type' => 'int', 'default' => 1, 'not null' => TRUE),
+    ),
+   'primary key' => array('id'),
+   );
+   
+   return $schema;
+}

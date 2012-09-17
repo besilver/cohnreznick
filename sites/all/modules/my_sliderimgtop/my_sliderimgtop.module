@@ -1,0 +1,298 @@
+<?php
+
+define(MODULE_TITLE_SIT, 'My Slider with with an image at the top');
+define(BLOCK_NAME_SIT, 'Slider Object');
+define(MODULE_NAME_SIT, 'my_sliderimgtop');
+define(REGION_SIT, 'sliderimgtop');
+define(STYLE_SIT, 'msit');
+define(DESCRIPTION_SIT, 'Create sliders with an image at the top and bottom of the text.');
+
+
+function my_sliderimgtop_init() {
+	
+	drupal_add_css(drupal_get_path('module', MODULE_NAME_SIT) . '/'.MODULE_NAME_SIT.'.css');
+	
+}
+
+function my_sliderimgtop_menu() {
+   $items = array();
+   
+   $items['admin/build/'.MODULE_NAME_SIT.''] = array(
+   'title' => t(MODULE_TITLE_SIT),
+   'description' => t(DESCRIPTION_SIT),
+   'page callback' => MODULE_NAME_SIT.'_admin',
+   'file' => MODULE_NAME_SIT.'.admin.inc',
+   'access callback' => TRUE
+   );
+   
+   $items['admin/build/'.MODULE_NAME_SIT.'/add'] = array(
+   'title' => t('Add new '.MODULE_TITLE_SIT.''),
+   'type' => MENU_SUGGESTED_ITEM,
+   'weight' => 1,
+   'page callback' => 'drupal_get_form',
+   'page arguments' => array(MODULE_NAME_SIT.'_add_ob'),
+   'file' => MODULE_NAME_SIT.'.admin.inc',
+   'access callback' => TRUE
+   );
+   
+   $items['admin/build/'.MODULE_TITLE_SIT.'/edit/%'] = array(
+    'title' => 'Editing of the block',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array(MODULE_NAME_SIT.'_ob_edit', 4),
+    'access arguments' => array(4),
+    'access callback' => TRUE,
+    'file' => MODULE_NAME_SIT.'.admin.inc',
+    'type' => MENU_SUGGESTED_ITEM,
+    'weight' => 1,
+   );
+   
+   $items['admin/build/'.MODULE_NAME_SIT.'/items/%'] = array(
+    'title' => 'Items of the '.BLOCK_NAME_SIT,
+    'page callback' => MODULE_NAME_SIT.'_ob_items',
+    'page arguments' => array(4),
+    'access arguments' => array(4),
+    'access callback' => TRUE,
+    'file' => MODULE_NAME_SIT.'.admin.inc',
+    'type' => MENU_SUGGESTED_ITEM,
+    'weight' => 2,
+   );
+   
+   $items['admin/build/'.MODULE_NAME_SIT.'/items/%/add'] = array(
+    'title' => 'Addition of a new item',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array(MODULE_NAME_SIT.'_ob_items_add', 4),
+    'access arguments' => array(4),
+    'access callback' => TRUE,
+    'file' => MODULE_NAME_SIT.'.admin.inc',
+    'type' => MENU_SUGGESTED_ITEM,
+    'weight' => 2,
+   );
+   
+   $items['admin/build/'.MODULE_NAME_SIT.'/enable/%'] = array(
+    'title' => 'Enable the block',
+    'page callback' => MODULE_NAME_SIT.'_ob_enable',
+    'page arguments' => array(4),
+    'access arguments' => array(4),
+    'access callback' => TRUE,
+    'type' => MENU_SUGGESTED_ITEM,
+    'weight' => 3,
+   );
+   
+   $items['admin/build/'.MODULE_NAME_SIT.'/items/%/enable/%'] = array(
+    'title' => 'Enable the item',
+    'page callback' => MODULE_NAME_SIT.'_ob_items_enable',
+    'page arguments' => array(4,6),
+    'access arguments' => array(4,6),
+    'access callback' => TRUE,
+    'type' => MENU_SUGGESTED_ITEM,
+    'weight' => 3,
+   );
+   
+   $items['admin/build/'.MODULE_NAME_SIT.'/items/%/delete/%'] = array(
+    'title' => 'Deleting of the item',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array(MODULE_NAME_SIT.'_ob_items_delete', 4,6),
+    'access arguments' => array(4,6),
+    'access callback' => TRUE,
+    'type' => MENU_SUGGESTED_ITEM,
+    'weight' => 4,
+   );
+   
+   $items['admin/build/'.MODULE_NAME_SIT.'/items/%/edit/%'] = array(
+    'title' => 'Editing of the item',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array(MODULE_NAME_SIT.'_ob_items_edit', 4,6),
+    'access arguments' => array(4,6),
+    'access callback' => TRUE,
+    'file' => MODULE_NAME_SIT.'.admin.inc',
+    'type' => MENU_SUGGESTED_ITEM,
+    'weight' => 4,
+   );
+   
+   $items['admin/build/'.MODULE_NAME_SIT.'/delete/%'] = array(
+    'title' => 'Deleting of the block',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array(MODULE_NAME_SIT.'_ob_delete', 4),
+    'access arguments' => array(4),
+    'access callback' => TRUE,
+    'type' => MENU_SUGGESTED_ITEM,
+    'weight' => 4,
+   );
+   
+   return $items;
+}
+ 
+function my_sliderimgtop_ob_enable($ob) {
+	
+	$result = db_query("SELECT enabled FROM {".MODULE_NAME_SIT."} WHERE id=%d", $ob);
+	$status = db_result($result);
+	$need_status = 1 - $status;
+	db_query("UPDATE {".MODULE_NAME_SIT."} SET enabled=%d WHERE id=%d", $need_status, $ob);
+	drupal_goto('admin/build/'.MODULE_NAME_SIT.'');
+	
+}
+
+function my_sliderimgtop_ob_delete($form_state, $ob) {
+	
+	$result = db_query("SELECT title FROM {".MODULE_NAME_SIT."} WHERE id=%d", $ob);
+	$title = db_result($result);
+	
+	$form['question'] = array(
+	  '#title' => 'Do you realy want to delete '.MODULE_NAME_SIT.' "'.$title.'" ?', 
+      '#type' => 'item',
+    );
+	
+	$form['id'] = array(
+      '#type' => 'hidden',
+      '#value' => $ob,
+    );
+	
+	$form['submit'] = array(
+      '#type' => 'submit',
+      '#value' => t('Delete'),
+    );
+	
+	return $form;
+	
+}
+
+
+function my_sliderimgtop_ob_delete_submit($form, &$form_state) {
+		
+	$form_values = $form_state['values'];
+	db_query("DELETE FROM {".MODULE_NAME_SIT."} WHERE id=%d", $form_values['id']);
+	drupal_goto('admin/build/'.MODULE_NAME_SIT.'');
+	
+}
+
+
+function my_sliderimgtop_ob_items_enable($ob, $obi) {
+	
+	$result = db_query("SELECT enabled FROM {".MODULE_NAME_SIT."_items} WHERE id=%d", $obi);
+	$status = db_result($result);
+	$need_status = 1 - $status;
+	db_query("UPDATE {".MODULE_NAME_SIT."_items} SET enabled=%d WHERE id=%d", $need_status, $obi);
+	drupal_goto('admin/build/'.MODULE_NAME_SIT.'/items/'.$ob);
+	
+}
+
+
+function my_sliderimgtop_ob_items_delete($form_state, $ob, $obi) {
+	
+	$result = db_query("SELECT title FROM {".MODULE_NAME_SIT."_items} WHERE id=%d", $obi);
+	$title = db_result($result);
+	
+	$form['question'] = array(
+	  '#title' => 'Do you realy want to delete item "'.$title.'" ?', 
+      '#type' => 'item',
+    );
+	
+	$form['id'] = array(
+      '#type' => 'hidden',
+      '#value' => $obi,
+    );
+	
+	$form['ob_id'] = array(
+      '#type' => 'hidden',
+      '#value' => $ob,
+    );
+	
+	$form['submit'] = array(
+      '#type' => 'submit',
+      '#value' => t('Delete'),
+    );
+	
+	return $form;
+	
+}
+
+
+function my_sliderimgtop_ob_items_delete_submit($form, &$form_state) {
+		
+	$form_values = $form_state['values'];
+	db_query("DELETE FROM {".MODULE_NAME_SIT."_items} WHERE id=%d", $form_values['id']);
+	drupal_goto('admin/build/'.MODULE_NAME_SIT.'/items/'.$form_values['ob_id']);
+	
+} 
+
+
+
+function my_sliderimgtop_block($op = 'list', $delta = 0, $edit = array()){
+    
+   if ($op == 'list') {
+	  
+	  $blocks[0] = array(
+         'info' => t('My module - '.MODULE_NAME_SIT), 
+         'weight' => 0, 
+         'status' => 1, 
+         'region' => 'sliderimgtop',
+      );
+	  
+	   return $blocks;
+   }
+   elseif ($op == 'view') {
+   	
+	  $blocks = array();
+   	
+	  $ob_current = my_sliderimgtop_db_get_current_ob();
+	   
+	  if($ob_current) {
+	  $i = 0;
+	  $obi_current = my_sliderimgtop_db_get_ob_items($ob_current[$i]->id);
+	   
+	  $a = array();
+	  foreach($obi_current[0] as $index) {
+		  ${$index} = array();
+	  }
+	  for($i = 0; $i < count($obi_current); $i++) {
+	  		foreach($obi_current[$i] as $index=>$value) {
+		       ${$index}[] = $value;
+	        }
+	  }
+	  
+	  }
+
+	  $block = array(
+         'subject' => NULL, 
+         'content' => 'Some content',
+         'main_title' => $ob_current[0]->title,
+         'title' => $title,
+         'body' => $body,
+         'image' => $image,
+         'link_url' => $link_url,
+      );
+	  
+	  return $block;
+   }
+
+}
+
+function my_sliderimgtop_db_get_current_ob() {
+	
+   $request_uri = (strlen(request_uri()) > 1 && substr(request_uri(),0,1) == '/') ? substr(request_uri(),1) : request_uri();
+   $current_uri = substr(request_uri(),0,1) == '/' ? substr(request_uri(),1) : request_uri();
+   $current_uri = request_uri() == '/' ? '<front>' : $current_uri; 
+   $current_uri = drupal_lookup_path('source', $current_uri ) ? drupal_lookup_path('source', $current_uri ) : $current_uri;
+	
+	$result = db_query("SELECT * FROM {".MODULE_NAME_SIT."} mob WHERE (display='%s' OR display='%s')  AND enabled=1", $request_uri, $current_uri);
+	$ob = array();
+    while ($record = db_fetch_object($result)) {
+       $ob[] = $record;
+    }
+
+    return $ob;
+	
+}
+
+function my_sliderimgtop_db_get_ob_items($ob) {
+	
+	$result = db_query("SELECT * FROM {".MODULE_NAME_SIT."_items} mob WHERE ob_id=%d AND enabled=1 ORDER BY weight", $ob);
+	$ob = array();
+    while ($record = db_fetch_object($result)) {
+       $ob[] = $record;
+    }
+	
+    return $ob;
+	
+}
+

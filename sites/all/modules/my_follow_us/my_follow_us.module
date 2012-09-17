@@ -1,0 +1,145 @@
+<?php
+
+function my_follow_us_menu() {
+   $items = array();
+   
+   $items['admin/build/follow_us'] = array(
+   'title' => t('My Follow Us'),
+   'description' => t('Social network links with icons'),
+   'page callback' => 'drupal_get_form',
+   'page arguments' => array('my_follow_us_aeform'),
+   'access callback' => TRUE,
+   );
+   
+   $items['admin/build/follow_us/success'] = array(
+   'title' => t('My Follow Us - Saving Information'),
+   'description' => t('Social network links with icons'),
+   'page callback' => 'my_follow_us_success',
+   'access callback' => TRUE,
+   'type' => MENU_LOCAL_TASK,
+   'weight' => 1,
+   );
+   
+   return $items;
+   
+}
+
+
+function my_follow_us_aeform() {
+	
+	$form['facebook_link'] = array(
+	  '#title' => 'Link to Facebook', 
+      '#type' => 'textfield',
+      '#default_value' => my_follow_us_get_field('facebook_link'),
+    );
+	
+	$form['twitter_link'] = array(
+	  '#title' => 'Link to Twitter', 
+      '#type' => 'textfield',
+      '#default_value' => my_follow_us_get_field('twitter_link'),
+    );
+	
+	$form['linkedin_link'] = array(
+	  '#title' => 'Link to Linkedin', 
+      '#type' => 'textfield',
+      '#default_value' => my_follow_us_get_field('linkedin_link'),
+    );
+	
+	$form['rss_link'] = array(
+	  '#title' => 'Link to RSS', 
+      '#type' => 'textfield',
+      '#default_value' => my_follow_us_get_field('rss_link'),
+    );
+	
+	$form['submit'] = array(
+      '#type' => 'submit',
+      '#value' => t('Save'),
+    );
+	
+	return $form;
+}
+
+
+function my_follow_us_get_field($field_name) {
+	
+	$result = db_query("SELECT {$field_name} FROM {my_follow_us} ", $obi);
+    $record = db_result($result);
+    return $record;
+
+}
+
+
+function my_follow_us_aeform_submit($form, &$form_state) {
+	
+	$form_values = $form_state['values'];
+	db_query("DELETE FROM {my_follow_us}");
+	$data = array(
+	    'facebook_link' => $form_values['facebook_link'],
+	    'twitter_link' => $form_values['twitter_link'],
+	    'linkedin_link' => $form_values['linkedin_link'],
+	    'rss_link' => $form_values['rss_link'],
+	);
+    drupal_write_record('my_follow_us', $form_values);
+	$form_state['redirect'] = url('admin/build/follow_us/success');
+}
+
+
+function my_follow_us_get_record() {
+	
+	$result = db_query("SELECT * FROM {my_follow_us} ");
+    $record = db_fetch_array($result);
+    return $record;
+	
+}
+
+
+function my_follow_us_success() {
+		
+	$content = '<br/><p>Data has been saved successfully<p>';
+	$content .= '<a href="'.url('admin/build/follow_us').'">Edit data</a>';
+	return $content;
+	
+}
+
+function my_follow_us_block($op = 'list', $delta = 0, $edit = array()){
+    
+   if ($op == 'list') {
+	   
+	  $blocks[0] = array(
+         'info' => t('My module - My Follow Us (Left)'), 
+         'weight' => 0, 
+         'status' => 1, 
+         'region' => 'follow_us_left',
+      );
+	  
+	  $blocks[1] = array(
+         'info' => t('My module - My Follow Us (Right)'), 
+         'weight' => 0, 
+         'status' => 1, 
+         'region' => 'follow_us_right',
+      );
+	  
+	  $blocks[2] = array(
+         'info' => t('My module - My Follow Us (on Careers)'), 
+         'weight' => 0, 
+         'status' => 1, 
+         'region' => 'follow_us_careers',
+      );
+	  
+	   return $blocks;
+   }
+   elseif ($op == 'view') {
+
+	  $block = array(
+         'subject' => NULL, 
+         'content' => 'Some content',
+         'facebook_link' => my_follow_us_get_field('facebook_link'),
+         'twitter_link' => my_follow_us_get_field('twitter_link'),
+         'linkedin_link' => my_follow_us_get_field('linkedin_link'),
+         'rss_link' => my_follow_us_get_field('rss_link')
+      );
+	  
+	  return $block;
+   }
+
+}

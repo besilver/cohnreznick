@@ -1,0 +1,189 @@
+<?php
+define(MODULE_TITLE_WU, 'My Working Us module');
+define(BLOCK_NAME_WU, 'Slider Object');
+define(MODULE_NAME_WU, 'my_workus');
+define(REGION_WU, 'workus');
+define(STYLE_WU, 'mwu');
+define(DESCRIPTION_WU, 'Filling content retractable unit.');
+
+
+function my_workus_init() {
+	
+	drupal_add_css(drupal_get_path('module', MODULE_NAME_WU) . '/'.MODULE_NAME_WU.'.css');
+	
+}
+
+function my_workus_menu() {
+   $items = array();
+   
+   $items['admin/build/'.MODULE_NAME_WU.''] = array(
+   'title' => t(MODULE_TITLE_WU),
+   'description' => t(DESCRIPTION_WU),
+   'page callback' => MODULE_NAME_WU.'_admin',
+   'file' => MODULE_NAME_WU.'.admin.inc',
+   'access callback' => TRUE
+   );
+   
+    $items['admin/build/'.MODULE_NAME_WU.'/add'] = array(
+   'title' => t(MODULE_TITLE_WU.' - Addition/Editing main information '),
+   'type' => MENU_SUGGESTED_ITEM,
+   'weight' => 1,
+   'page callback' => 'drupal_get_form',
+   'page arguments' => array(MODULE_NAME_WU.'_add_form'),
+   'file' => MODULE_NAME_WU.'.admin.inc',
+   'access callback' => TRUE
+   );
+   
+   $items['admin/build/'.MODULE_NAME_WU.'/additem'] = array(
+   'title' => t(MODULE_TITLE_WU.' - Addition Jquery carousel item'),
+   'type' => MENU_SUGGESTED_ITEM,
+   'weight' => 1,
+   'page callback' => 'drupal_get_form',
+   'page arguments' => array(MODULE_NAME_WU.'_additem_form'),
+   'file' => MODULE_NAME_WU.'.admin.inc',
+   'access callback' => TRUE
+   );
+   
+   $items['admin/build/'.MODULE_NAME_WU.'/edit/%'] = array(
+    'title' => 'Editing of the item',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array(MODULE_NAME_WU.'_edititem_form', 4),
+    'access arguments' => array(4),
+    'access callback' => TRUE,
+    'file' => MODULE_NAME_WU.'.admin.inc',
+    'type' => MENU_SUGGESTED_ITEM,
+    'weight' => 4,
+   );
+   
+    $items['admin/build/'.MODULE_NAME_WU.'/enable/%'] = array(
+    'title' => 'Enable/Disable',
+    'page callback' => MODULE_NAME_WU.'_ob_enable',
+    'page arguments' => array(4),
+    'access arguments' => array(4),
+    'access callback' => TRUE,
+    'type' => MENU_SUGGESTED_ITEM,
+    'weight' => 4,
+   );
+   
+     $items['admin/build/'.MODULE_NAME_WU.'/delete/%'] = array(
+    'title' => 'Deleting of the item',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array(MODULE_NAME_WU.'_ob_delete', 4),
+    'access arguments' => array(4),
+    'access callback' => TRUE,
+    'type' => MENU_SUGGESTED_ITEM,
+    'weight' => 4,
+   );
+   
+   return $items;
+}
+
+function my_workus_block($op = 'list', $delta = 0, $edit = array()){
+    
+   if ($op == 'list') {
+	  
+	  $blocks[1] = array(
+         'info' => t('My module - '.MODULE_NAME_WU), 
+         'weight' => 0, 
+         'status' => 1, 
+         'region' => 'workus',
+      );
+	  
+	   return $blocks;
+   }
+   elseif ($op == 'view') {
+   	
+	  $blocks = array();
+   	
+	  $obj = my_workus_db_get_main();
+	  
+	  $jcitems = my_workus_db_get_items();
+	  $title = $body = $link_title = $link_url =  array();
+	  for($i = 0; $i < count($jcitems); $i++) {
+	  	   $title[$i] = $jcitems[$i]->title;
+	  	   $body[$i] = $jcitems[$i]->body;
+		   $link_title[$i] = $jcitems[$i]->link_title ? $jcitems[$i]->link_title : 'Read more';
+		   $link_url[$i] = $jcitems[$i]->link_url;		 
+	   }
+
+	  $block = array(
+         'subject' => NULL, 
+         'content' => 'Some content',
+         'main_title' => $obj->title,
+         'main_body' => $obj->body,
+         'video_link' => $obj->video_link,
+         'link_type' => $obj->link_type,
+         'title' => $title,
+		 'body' => $body,
+		 'link_title' => $link_title,
+		 'link_url' => $link_url,
+      );
+	  
+	  return $block;
+   }
+
+}
+
+function my_workus_db_get_main() {
+	
+	return   db_fetch_object(db_query("SELECT * FROM {my_workus} mob "));
+	
+}
+ 
+function my_workus_ob_enable($ob) {
+	
+	$result = db_query("SELECT enabled FROM {my_workus_items} WHERE id=%d", $ob);
+	$status = db_result($result);
+	$need_status = 1 - $status;
+	db_query("UPDATE {my_workus_items} SET enabled=%d WHERE id=%d", $need_status, $ob);
+	drupal_goto('admin/build/'.MODULE_NAME_WU.'');
+	
+}
+
+function my_workus_ob_delete($form_state, $ob) {
+	
+	$result = db_query("SELECT title FROM {my_workus_items} WHERE id=%d", $ob);
+	$title = db_result($result);
+	
+	$form['question'] = array(
+	  '#title' => 'Do you realy want to delete the item "'.$title.'" ?', 
+      '#type' => 'item',
+    );
+	
+	$form['id'] = array(
+      '#type' => 'hidden',
+      '#value' => $ob,
+    );
+	
+	$form['submit'] = array(
+      '#type' => 'submit',
+      '#value' => t('Delete'),
+    );
+	
+	return $form;
+	
+}
+
+
+function my_workus_ob_delete_submit($form, &$form_state) {
+		
+	$form_values = $form_state['values'];
+	db_query("DELETE FROM {my_workus_items} WHERE id=%d", $form_values['id']);
+	drupal_goto('admin/build/'.MODULE_NAME_WU.'');
+	
+}
+
+
+
+function my_workus_db_get_items() {
+	
+	$result = db_query("SELECT * FROM {".MODULE_NAME_WU."_items} mob WHERE enabled=1 ORDER BY weight");
+	$ob = array();
+    while ($record = db_fetch_object($result)) {
+       $ob[] = $record;
+    }
+	
+    return $ob;
+	
+} 
+

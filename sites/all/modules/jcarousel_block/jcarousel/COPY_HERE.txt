@@ -1,0 +1,3 @@
+Go to http://sorgalla.com/jcarousel/ and download the latest version. Then
+uncompress the contents of the "jcarousel" directory of the download file to
+this folder (modules/jcarousel_block/jcarousel).

@@ -1,0 +1,20 @@
+.mp-add {
+	margin: 20px;
+}
+
+.mp-op {
+	list-style-type: none;
+}
+
+.mp-op li {
+	display: inline-block; 
+    background: none !important;
+}
+
+.mp-disabled {
+	color: #ADADAD !important;
+}
+
+textarea {
+	width: 430px !important;
+}

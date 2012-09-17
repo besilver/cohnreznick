@@ -1,0 +1,20 @@
+.mwu-add {
+	margin: 0px;
+}
+
+.mwu-op {
+	list-style-type: none;
+}
+
+.mwu-op li {
+	display: inline-block; 
+    background: none !important;
+}
+
+.mwu-disabled {
+	color: #ADADAD !important;
+}
+
+textarea {
+	width: 430px !important;
+}

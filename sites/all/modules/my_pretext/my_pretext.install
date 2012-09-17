@@ -1,0 +1,24 @@
+<?php
+function my_pretext_install() {
+	drupal_install_schema('my_pretext');
+}
+
+function my_pretext_uninstall() {
+    drupal_uninstall_schema('my_pretext');
+}
+
+function my_pretext_schema() {
+	
+   $schema['my_pretext'] = array(
+    'fields' => array(
+      'id' => array('type' => 'serial', 'not null' => TRUE),
+      'display' => array('type' => 'varchar', 'length' => 255, 'not null' => TRUE),
+      'title' => array('type' => 'varchar', 'length' => 255, 'not null' => TRUE),
+      'body' => array('type' => 'text', 'length' => 1024, 'not null' => TRUE),
+      'enabled' => array('type' => 'int', 'default' => 1, 'not null' => TRUE),
+    ),
+   'primary key' => array('id'),
+   );
+   
+   return $schema;
+}
