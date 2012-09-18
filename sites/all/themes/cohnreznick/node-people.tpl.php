@@ -1,4 +1,4 @@
-<?php if ($teaser) : ?>
+<?php  if ($teaser) : ?>
 	      <li>
 	      <?php if($node->field_photo[0]['filepath']) : ?>
 	          <a href="<?php echo url("node/$node->nid") ?>"><?php echo getNodeImage($node, 'field_photo', array('width' => 99, 'class' => 'left')) ?></a>
@@ -9,7 +9,7 @@
           <?php if(getNodeFieldValue($node, 'field_job_title')) : ?>
           <p class="job"><b><?php echo getNodeFieldValue($node, 'field_job_title') ?></b></p>
           <?php endif; ?>
-          <p><?php echo $content ?></p>
+          <p><?php echo getShortText($content,30) ?></p>
           <p><a href="<?php echo url("node/$node->nid") ?>" class="more">More About <?php echo getNodeFieldValue($node, 'field_name') ?></a></p>          
           <div class="gray_icons small left">
           <?php if(getNodeFieldValue($node, 'field_email')) : ?>
@@ -57,13 +57,16 @@
            <p class="small"><a href="/<?php echo url(getFilePath($node, 'field_vcard')) ?>"><span class="vcard_icon icon">Download vCard</span></a></p>    
         <?php endif; ?>
       </div>
+      
+      <?php if(getNodeFieldValue($node, 'field_profaffil')) : ?>
       <p class="greentext"><b><i>Professional Affiliations:</i></b></p>
+      <?php $profaffil = explode("\n", getNodeFieldValue($node, 'field_profaffil')); ?>
       <ul class="orange_boolet lower">
-        <li>Item one here affiliation</li>
-        <li>Item two here affiliation</li>
-        <li>Item three here affiliation lorem ipsm </li>
+      <?php foreach($profaffil as $item) : ?>
+        <li><?php echo $item; ?></li>
+       <?php endforeach; ?>
       </ul>
-      <p>Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod mro tempore, cum soluta nobis est eligendi.Nam libero tempore, cum soluta nobis est elige</p>
+      <?php endif; ?>
       <p class="lower"><?php echo $content ?></p>
       
       <div id="contact_us_form">

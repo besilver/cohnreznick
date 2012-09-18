@@ -1,5 +1,17 @@
 <?php
 
+function getShortText($body, $n) {
+	
+	$body_ar = explode(' ', strip_tags($body));
+	$str = '';
+	for($i = 0; $i < min($n, count($body_ar)); $i++) {
+		 $str .= $body_ar[$i].' ';
+	}
+	$str = trim($str).' ...';
+	return $str;
+	
+}
+
 function getNodeFieldValue($node, $field_name) {
 
 	 if (count($node->{$field_name}) == 1)

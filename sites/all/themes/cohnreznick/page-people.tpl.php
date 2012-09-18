@@ -38,14 +38,20 @@
     <?php require_once('right_top.php') ?>
     <div class="main_content">
       <div class="share"><a href="#"><img src="/<?php echo path_to_theme() ?>/images/share.png" width="78" height="20" alt="share this button"/></a></div>
-      <?php echo $pretext; ?>
-      <ul class="listing separatorlist">
-      <?php echo $content; ?>
-      </ul>
+      
+      <?php 
+         if(isset($_GET['psearch'])) : ?>
+                <h1>People Results</h1>
+      			<?php require_once('part_psearch.php');
+		 else : ?>
+	        	 <?php echo $pretext; ?>
+    		    <ul class="listing separatorlist"><?php  echo $content; ?></ul>
+      <?php endif; ?>
     </div>
     <?php echo $threehorimg; ?>
   </div>
-  <?php echo $psearch; ?>
+  
+  <?php  echo $psearch; ?>
   <?php echo $workus; ?>
 </div>
   <?php require_once('footer.php') ?>

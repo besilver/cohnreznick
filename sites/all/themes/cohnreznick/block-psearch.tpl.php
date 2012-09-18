@@ -8,32 +8,41 @@
           <select name="psearch[location]">
             <option value="">Location</option>
             <?php for($i = 0; $i < count($block->locations); $i++) { ?>
-            	 <option value="<?php echo $block->locations[$i]->tid ?>"><?php echo $block->locations[$i]->name ?></option>
+            	 <?php 
+            	         if($_GET['psearch']['location'] && $block->locations[$i]->tid == intval($_GET['psearch']['location']))  
+						        $selected = 'selected="selected"';
+						 else
+						    	$selected = '';
+				?>
+                  	     <option <?php echo $selected?>  value="<?php echo $block->locations[$i]->tid ?>"><?php echo $block->locations[$i]->name ?></option>
             <?php } ?>
           </select>
           <select name="psearch[industry]">
             <option value="">Industry</option>
              <?php for($i = 0; $i < count($block->industries); $i++) { ?>
-            	 <option value="<?php echo $block->industries[$i]->tid ?>"><?php echo $block->industries[$i]->name ?></option>
+             	 <?php 
+            	         if($_GET['psearch']['industry'] && $block->industries[$i]->tid == intval($_GET['psearch']['industry']))  
+						        $selected = 'selected="selected"';
+						 else
+						    	$selected = '';
+				?>
+            	 <option  <?php echo $selected?>  value="<?php echo $block->industries[$i]->tid ?>"><?php echo $block->industries[$i]->name ?></option>
             <?php } ?>
           </select>
           <select name="psearch[service]">
             <option value="">Service</option>
             <?php for($i = 0; $i < count($block->services); $i++) { ?>
-            	 <option value="<?php echo $block->industries[$i]->nid ?>"><?php echo $block->services[$i]->title ?></option>
+              	 <?php 
+            	         if($_GET['psearch']['service'] && $block->services[$i]->nid == intval($_GET['psearch']['service']))  
+						        $selected = 'selected="selected"';
+						 else
+						    	$selected = '';
+				?>           	 
+            	 <option  <?php echo $selected?>  value="<?php echo $block->services[$i]->nid ?>"><?php echo $block->services[$i]->title ?></option>
             <?php } ?>
           </select>
           <input type="submit" value="Search"/>
         </form>
-        
-        <?php
-            if($_GET) {
-            	echo '<pre>';
-            	print_r($_GET);
-            }
-        ?>
-        
-        
         
         <div class="nivoslider-wrapper">
           <div id="nivoSlider" class="nivoSlider" style="height:430px;"> <img src="/<?php echo path_to_theme() ?>/images/nivosliderbig.jpg" alt="" title="#htmlcaption1"/> <img src="/<?php echo path_to_theme() ?>/images/nivosliderbig.jpg" alt="" title="#htmlcaption2" /> <img src="/<?php echo path_to_theme() ?>/images/nivosliderbig.jpg" alt="" title="#htmlcaption3"/> <img src="/<?php echo path_to_theme() ?>/images/nivosliderbig.jpg" alt="" title="#htmlcaption4"/> </div>
