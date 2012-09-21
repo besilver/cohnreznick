@@ -20,6 +20,10 @@ regions[follow_us_careers] = Follow us (on Careers)
 regions[sliderimgtop] = Slider with a picture at the top and bottom of the text
 regions[workus] = Working us
 regions[psearch] = People search
+regions[presults] = People results
+regions[pservices] = People services
+regions[footer_menu] = Main menu in footer
+regions[plist] = People List
 
 
 features[] = logo

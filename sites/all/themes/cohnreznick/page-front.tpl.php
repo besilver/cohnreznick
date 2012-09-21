@@ -5,8 +5,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9" />
 		<?php print $head ?>
 		<title><?php print $head_title ?></title>
-		<?php print $styles ?>
-		<?php print $scripts ?>
+		<?php //print $styles ?>
+		<?php //print $scripts ?>
 		<link href="<?php echo path_to_theme() ?>/css/main.css" rel="stylesheet" type="text/css"/>
 	    <link href="<?php echo path_to_theme() ?>/css/bx_styles.css" rel="stylesheet" type="text/css"/>
 	    <link href="<?php echo path_to_theme() ?>/css/nivo-slider.css" rel="stylesheet" type="text/css" />
@@ -20,6 +20,8 @@
 		<script src="<?php echo path_to_theme() ?>/js/jquery.cookie.js" type="text/javascript"></script>
 		<script src="<?php echo path_to_theme() ?>/js/jquery.ui.widget.min.js" type="text/javascript"></script>
 		<script src="<?php echo path_to_theme() ?>/js/jquery.ui.tabs.min.js" type="text/javascript"></script>
+		<script src="<?php echo path_to_theme() ?>/js/jquery.ui.core.min.js" type="text/javascript"></script>
+		<script src="<?php echo path_to_theme() ?>/js/jquery.toningImage.js" type="text/javascript"></script>
 </head>
 
 <body>
@@ -33,6 +35,7 @@
     <?php echo $threehorimg; ?> 
     </div>
   </div>
+  <?php  echo $psearch; ?>
   <?php echo $workus; ?>
 </div>
      <?php require_once('footer.php') ?>

@@ -67,16 +67,18 @@
        <?php endforeach; ?>
       </ul>
       <?php endif; ?>
-      <p class="lower"><?php echo $content ?></p>
+      <?php if(getBody($node->nid)) : ?>
+      <p class="lower"><?php echo getBody($node->nid) ?></p>
+       <?php endif; ?>
       
-      <div id="contact_us_form">
-      	<div id="contact_us_slide_btn"><a href="#">Contact Us</a></div>
-        <form id="contact_us" name="contact_us">
+      <div class="accordion_panel" id="contact_us_form">
+      	<div class="accordion_slide_btn"><a href="#">Contact Us</a></div>
+        <form id="contact_us" class="accordion_content" name="contact_us">
         <input type="text" name="name" value="Name"/>
         <input type="text" name="email" value="Email"/>
         Phone <input type="text" class="ph1"/> - <input type="text" class="ph2"/> - <input type="text" class="ph3"/>
         <textarea>Comments...</textarea>
-        <!--<input type="submit" value="Submit" class="right"/>-->
+        <input type="submit" value="Send" />
         </form>
       </div>
 <?php endif; ?>

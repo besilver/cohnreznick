@@ -10,13 +10,37 @@
 	<link href="/<?php echo path_to_theme() ?>/css/main.css" rel="stylesheet" type="text/css"/>
 	<link href="/<?php echo path_to_theme() ?>/css/bx_styles.css" rel="stylesheet" type="text/css"/>
 	<link href="/<?php echo path_to_theme() ?>/css/nivo-slider.css" rel="stylesheet" type="text/css" />
-	<script src="/<?php echo path_to_theme() ?>/js/jquery-1.8.0.min.js" type="application/javascript"></script>
-	<script src="/<?php echo path_to_theme() ?>/js/jquery.bxSlider.js" type="text/javascript"></script>
-	<script src="/<?php echo path_to_theme() ?>/js/general.js" type="text/javascript"></script>
-	<script src="/<?php echo path_to_theme() ?>/js/fixedElemScroll.js" type="text/javascript"></script>
-	<script src="/<?php echo path_to_theme() ?>/js/jquery.effects.core.js" type="text/javascript"></script>
-	<script src="/<?php echo path_to_theme() ?>/js/jquery.effects.slide.js" type="text/javascript"></script>
-	<script src="/<?php echo path_to_theme() ?>/js/jquery.nivo.slider.pack.js" type="text/javascript"></script>
+<script src="/<?php echo path_to_theme() ?>/js/jquery-1.8.0.min.js" type="application/javascript"></script>
+		<script src="/<?php echo path_to_theme() ?>/js/jquery.bxSlider.js" type="text/javascript"></script>
+		<script src="/<?php echo path_to_theme() ?>/js/general.js" type="text/javascript"></script>
+		<script src="/<?php echo path_to_theme() ?>/js/fixedElemScroll.js" type="text/javascript"></script>
+		<script src="/<?php echo path_to_theme() ?>/js/jquery.effects.core.js" type="text/javascript"></script>
+		<script src="/<?php echo path_to_theme() ?>/js/jquery.effects.slide.js" type="text/javascript"></script>
+		<script src="/<?php echo path_to_theme() ?>/js/jquery.nivo.slider.pack.js" type="text/javascript"></script>
+		<script src="/<?php echo path_to_theme() ?>/js/jquery.cookie.js" type="text/javascript"></script>
+		<script src="/<?php echo path_to_theme() ?>/js/jquery.ui.widget.min.js" type="text/javascript"></script>
+		<script src="/<?php echo path_to_theme() ?>/js/jquery.ui.tabs.min.js" type="text/javascript"></script>
+		<script src="/<?php echo path_to_theme() ?>/js/jquery.ui.core.min.js" type="text/javascript"></script>
+		<script src="/<?php echo path_to_theme() ?>/js/jquery.toningImage.js" type="text/javascript"></script>
+	
+	<script type="text/javascript">
+	  
+			jQuery(document).ready(function () {
+				
+				 <?php if(empty($_GET['psearch']) && empty($_GET['page'])) : ?>
+		     		jQuery("#right_slide_panel_people .slide_content").width(jQuery(document).width() / 2 + 240);
+			    	jQuery('#right_slide_panel_people .slide_content').css('display','block');	
+				<?php endif; ?>	
+				jQuery('#search_people input[type=submit]').click(function () {
+						jQuery("#right_slide_panel_people .slide_content").animate({
+				            width: 'toggle'
+				       });
+				
+				});
+});
+
+    </script>
+
 </head>
 
 <body>
@@ -42,10 +66,10 @@
       <?php 
          if(isset($_GET['psearch'])) : ?>
                 <h1>People Results</h1>
-      			<?php require_once('part_psearch.php');
+      			<?php echo $presults;
 		 else : ?>
 	        	 <?php echo $pretext; ?>
-    		    <ul class="listing separatorlist"><?php  echo $content; ?></ul>
+	        	 <?php echo $plist; ?>
       <?php endif; ?>
     </div>
     <?php echo $threehorimg; ?>

@@ -10,7 +10,7 @@
 		<link href="/<?php echo path_to_theme() ?>/css/main.css" rel="stylesheet" type="text/css"/>
 		<link href="/<?php echo path_to_theme() ?>/css/bx_styles.css" rel="stylesheet" type="text/css"/>
 		<link href="/<?php echo path_to_theme() ?>/css/nivo-slider.css" rel="stylesheet" type="text/css" />
-		<script src="/<?php echo path_to_theme() ?>/js/jquery-1.8.0.min.js" type="application/javascript"></script>
+<script src="/<?php echo path_to_theme() ?>/js/jquery-1.8.0.min.js" type="application/javascript"></script>
 		<script src="/<?php echo path_to_theme() ?>/js/jquery.bxSlider.js" type="text/javascript"></script>
 		<script src="/<?php echo path_to_theme() ?>/js/general.js" type="text/javascript"></script>
 		<script src="/<?php echo path_to_theme() ?>/js/fixedElemScroll.js" type="text/javascript"></script>
@@ -20,6 +20,8 @@
 		<script src="/<?php echo path_to_theme() ?>/js/jquery.cookie.js" type="text/javascript"></script>
 		<script src="/<?php echo path_to_theme() ?>/js/jquery.ui.widget.min.js" type="text/javascript"></script>
 		<script src="/<?php echo path_to_theme() ?>/js/jquery.ui.tabs.min.js" type="text/javascript"></script>
+		<script src="/<?php echo path_to_theme() ?>/js/jquery.ui.core.min.js" type="text/javascript"></script>
+		<script src="/<?php echo path_to_theme() ?>/js/jquery.toningImage.js" type="text/javascript"></script>
 </head>
 
 <body>
@@ -92,6 +94,7 @@
         <div class="right"> <img src="/<?php echo path_to_theme() ?>/images/promo_3.png" width="127" height="79" alt=""/> <a href="#" class="greentext">Lorem Ipsm Titling Goes Here </a> </div>
       </div>
     </div>
+    <?php  echo $psearch; ?>
     <?php echo $workus; ?>
   </div>
   <?php require_once('footer.php') ?>

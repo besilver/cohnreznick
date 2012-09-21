@@ -15,11 +15,9 @@ jQuery(document).ready(function () {
     if (!$.trim(jQuery("#center").html())) {
         var currImg = 1;
         var intID = setInterval(changeImg, 12000);
-        
-        var imgPath = '/sites/all/themes/cohnreznick/';
         /*  Change Background */
         var imgArr = new Array( // relative paths of images
-        imgPath + 'images/vertical_photo_5.jpg', imgPath + 'images/vertical_photo_3.jpg', imgPath + 'images/vertical_photo_2.jpg', imgPath + 'images/vertical_photo_6.jpg', imgPath + 'images/vertical_photo_4.jpg', imgPath + 'images/vertical_photo_1.jpg', imgPath + 'images/vertical_photo_7.jpg', imgPath + 'images/vertical_photo_8.jpg', imgPath + 'images/vertical_photo_9.jpg');
+        '/sites/all/themes/cohnreznick/images/vertical_photo_5.jpg', '/sites/all/themes/cohnreznick/images/vertical_photo_3.jpg', '/sites/all/themes/cohnreznick/images/vertical_photo_2.jpg', '/sites/all/themes/cohnreznick/images/vertical_photo_6.jpg', '/sites/all/themes/cohnreznick/images/vertical_photo_4.jpg', '/sites/all/themes/cohnreznick/images/vertical_photo_1.jpg', '/sites/all/themes/cohnreznick/images/vertical_photo_7.jpg', '/sites/all/themes/cohnreznick/images/vertical_photo_8.jpg', '/sites/all/themes/cohnreznick/images/vertical_photo_9.jpg');
         var preloadArr = new Array();
         var i;
         /* preload images */
@@ -226,19 +224,21 @@ function setHeightDesignElements() {
 
     });
     /*  set height of  main sub menu */
+	
     jQuery("#main_nav li ul").height(jQuery("#sideright").height() - jQuery(window).scrollTop() - 230);
     jQuery(window).scroll(function () {
         jQuery("#main_nav li ul").height(jQuery("#sideright").height() - jQuery(window).scrollTop() - 230);
         if (jQuery("#center:has(*)").length && (jQuery("#center").height() > jQuery('#sideleft').height())) {
             if ((jQuery("#main_nav li ul").height() + 190) < jQuery("#center").height()) {
-                jQuery("#main_nav li ul").height(jQuery("#center").height() - 230);
+                jQuery("#main_nav li ul").height(jQuery("#center").height() - 198);
             }
         } else {
             if ((jQuery("#main_nav li ul").height() + 190) < jQuery("#sideleft").height()) {
-                jQuery("#main_nav li ul").height(jQuery("#sideleft").height() - 230);
+                jQuery("#main_nav li ul").height(jQuery("#sideleft").height() - 198);
             }
         }
     });
+	
 }
 
 jQuery.fn.extend({
@@ -273,28 +273,61 @@ jQuery.fn.extend({
 });
 
 function mainNavigation() {
-    jQuery('ul#main_nav div').each(function (i) {
-        jQuery(this).append('<div class="close"></div>');
-        jQuery('.close').click(function () {
-            jQuery(this).parent().fadeOut();
+  
+jQuery('ul#main_nav div').append('<div class="close"></div>');
+	jQuery('.close').click(function () {
+            jQuery("ul#main_nav div").fadeOut('fast');	
             jQuery(this).parents('li').first().removeClass('expanded').addClass('collapsed');
-        });
-        jQuery(this).prev().addClass('collapsible').click(function () {
-            var this_i = jQuery('ul#main_nav div ul').index(jQuery(this).next()); // The index of the submenu of the clicked link
-            if (jQuery(this).next().css('display') == 'none') {
-                jQuery('ul#main_nav div').fadeOut();
-                jQuery('#right_slide_panel .slide_content').hide('slow');
+    });	
+	jQuery('ul#main_nav div li').each(function() {
+		jQuery(this).children('div').css('width','270px').append('<div class="back">&larr; Back</div>');
+		jQuery('.back').click(function () {
+			 jQuery(this).parent('div:first').css('visibility', 'hidden').parent().parent().parent().css('visibility', 'visible');		 
+		});
+	});
+	jQuery('ul#main_nav a').click(function () {
+		if($(this).next().is('div')== true){
+			if($(this).next().css('display') == 'none'){
+				jQuery(this).parent('li').prevAll().removeClass('expanded').addClass('collapsed').children("div").fadeOut();
+				jQuery(this).parent('li').nextAll().removeClass('expanded').addClass('collapsed').children("div").fadeOut();
+				jQuery('ul#main_nav a').next().find('div').each(function() {					
+					if(jQuery(this).hasClass('back') || jQuery(this).hasClass('close'))
+					{}else jQuery(this).fadeOut().css('visibility', 'hidden').parent('li').removeClass('expanded').addClass('collapsed');
+				});
+					
+				jQuery('#right_slide_panel .slide_content').hide('slow');
                 jQuery('#right_slide_panel_people .slide_content').hide('slow');
-                jQuery('ul#main_nav li').removeClass('expanded').addClass('collapsed');
-                jQuery(this).next().slideLeftShow() // Show submenu:
-                jQuery(this).parents('li').first().removeClass('collapsed').addClass('expanded');
-            } else {
-                jQuery(this).next().slideLeftHide(); // Hide submenu:
-                jQuery(this).parents('li').first().removeClass('expanded').addClass('collapsed');
-            }
-            return false;
-        });
-    });
+				jQuery(this).parent('li').removeClass('expanded').addClass('collapsed');
+                jQuery(this).next().fadeIn(); // Show submenu:
+				jQuery(this).parent('li').removeClass('collapsed').addClass('expanded');
+				jQuery(this).next().css('visibility', 'visible');
+				if(jQuery(this).next().css('visibility', 'visible').parent().parent().parent().hasClass('left_sidebar')== true) 
+					{						
+						jQuery(this).parent().parent().parent().css('visibility','visible');		
+					}
+				else{
+						jQuery(this).next().css('visibility', 'visible').parent().parent().parent().css('visibility','hidden');	
+						if(jQuery(this).next().find('div.back').length == 1  && jQuery(this).parent('li').hasClass('expanded') ){
+							jQuery(this).parent().parent().parent().css('visibility','hidden');
+							jQuery(this).next().children('div.close').css('left','237px');
+						}	
+					}
+			}
+			else{
+				jQuery(this).next().fadeOut();
+				jQuery('ul#main_nav a').next().find('div').each(function() {					
+					if(jQuery(this).hasClass('back') || jQuery(this).hasClass('close'))
+					{}else jQuery(this).fadeOut().css('visibility', 'hidden').parent('li').removeClass('expanded').addClass('collapsed');
+				});
+			}
+			
+			return false;
+		}
+		else{
+			
+		}
+		
+	});
 }
 
 function subNavigation() {
@@ -328,11 +361,15 @@ function subNavigation() {
         });
     });
 
-    function cookieSet(index) {
+    
+
+}
+function cookieSet(index) {
         $.cookie('submenuMark-' + index, 'opened', {
             expires: null,
             path: '/'
         }); // Set mark to cookie (submenu is shown):
+		
     }
 
     function cookieDel(index) {
@@ -341,8 +378,6 @@ function subNavigation() {
             path: '/'
         }); // Delete mark from cookie (submenu is hidden):
     }
-
-}
 var iPad = false;
 var mobile = false;
 if (typeof navigator != "undefined") {

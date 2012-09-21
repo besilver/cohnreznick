@@ -1,5 +1,9 @@
 <?php
 
+function getBody($nid) {
+	return db_result(db_query("SELECT body FROM {node_revisions} WHERE nid=%d", $nid));
+}
+
 function getShortText($body, $n) {
 	
 	$body_ar = explode(' ', strip_tags($body));

@@ -3,7 +3,7 @@
       <div class="inner">
         <h2>Search Our People</h2>
     
-        <form id="search_people" name="search_people" method="get">
+        <form id="search_people" name="search_people" method="get" action="<?php echo url('taxonomy/term/5') ?>">
             <input type="text" name="psearch[name]" value="Name">
           <select name="psearch[location]">
             <option value="">Location</option>

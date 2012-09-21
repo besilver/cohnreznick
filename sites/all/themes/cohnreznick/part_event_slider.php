@@ -17,7 +17,7 @@
          $node_media[] = $ob;
    }*/
    
-   print_r($nodes_media);
+//  print_r($nodes_media);
 ?>
       <div class="nivoslider-wrapper">
         <div id="nivoSlider" class="nivoSlider">

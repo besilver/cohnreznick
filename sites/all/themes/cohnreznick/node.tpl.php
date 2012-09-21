@@ -5,6 +5,14 @@
         </li>
  <?php else : ?>
  	   <h2><?php echo $title ?></h2>
- 	   <div><?php echo $content; ?></div>
+ 	   <div>
+      <?php 
+            if(getBody($node->nid))
+ 	            echo getBody($node->nid); 
+			else {
+				echo $content;
+			}
+ 	   ?>
+ 	   </div>
  <?php endif; ?>
    

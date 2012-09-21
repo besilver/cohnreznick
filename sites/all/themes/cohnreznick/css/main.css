@@ -129,8 +129,9 @@ a:hover img {
 	width:200px;
 	color: white;
 	padding-right:30px;
-	overflow: hidden;
+	/*overflow: hidden;*/
 	margin-right: 240px;
+	position: relative;
 }
 .fixed {
 	position: fixed;
@@ -225,35 +226,44 @@ a:hover img {
 	background: url(../images/boolet_orange.png) no-repeat 10px 15px;
 	color: #f26422 !important;
 }
-#main_nav li div {
-	width:345px;
+#main_nav li div {	
 	position:absolute;
 	top:0px;
-	right: -105px;
+	left: 0px;
 	z-index: 11;
 	display: none;
+	/*width:900px; */
+	margin-left: 230px;
+	margin-top:80px;
+	background:#f26422;
 }
+#main_nav li div div{ margin-left: 0; margin-top:0}
 #main_nav li div .close {
 	position: absolute;
-	right: 0;
-	top:80px;
+	left: 302px;
+	top:0px;
 	width:33px;
 	height:29px;
 	cursor: pointer;
 	display: block !important;
+	background:url(../images/close.gif) no-repeat right top;
 }
-#main_nav .sub-menu {
-	background:#f26422 url(../images/sub_menu_bg.jpg) no-repeat right top;
-	padding: 75px 35px;
-	margin:80px 0 0 0;
+#main_nav .sub-menu {	
+	padding: 60px 35px;
+	margin:0;
 	list-style: none;
 	font-size:13px;
+	display:inline-block;
+	float: left;
 }
 #main_nav .sub-menu li {
-	padding: 10px 10px 10px 20px;
+	padding: 10px 10px 10px 15px;
 	border-bottom: solid 1px #f3844d;
-	background: none;
+	background: none;	
+	width:240px;
+	list-style: none;
 }
+#main_nav .sub-menu li .sub-menu li{ width:175px;}
 #main_nav .sub-menu li:hover {
 	background: #f99833;
 	background: -moz-linear-gradient(top, #f99833, #f26622 ); /* Firefox 3.6+ */
@@ -272,7 +282,7 @@ a:hover img {
 #main_nav .sub-menu li a {
 	background: none;
 	opacity: 1;
-	padding: 8px 0;
+	padding: 5px 0;
 	color:#fff !important;
 }
 #main_nav .sub-menu li a:hover {
@@ -280,6 +290,24 @@ a:hover img {
 	opacity: 1;
 	text-decoration: none;
 }
+#main_nav .sub-menu li div.back{ position: absolute; top: 0; left:0px; height:30px;cursor: pointer;
+display: block !important; background:#d75f23; line-height: 30px; width:55px;font-weight: bold;
+padding: 0 15px;}
+
+#main_nav .parent{ border-bottom: solid 3px #f3844d !important;}
+#main_nav .parent a,#main_nav .parent a:visited{ font-size:13px; font-weight: bold;}
+
+.menu2col li{ width:175px !important;}
+.menu2col div{ width:540px;}
+#main_nav li.menu2col div .close{ left:507px;}
+
+
+
+.menu3col li{ width:175px !important;}
+.menu3col div{ width:740px;}
+#main_nav li.menu3col div .close{ left: 707px;}
+.menu3col ul:nth-child(2){ padding-left:0 !important; padding-right:0 !important; } 
+
 /*  ---- Sub Navigation styles (generic layout 3columns) --*/
 #sub_nav {
 	list-style: none;
@@ -532,6 +560,7 @@ input[type=submit] {
 	color: #00573d;
 	line-height: 22px;
 	display: inline-block;
+	border-top:solid 3px #dde0e2;
 }
 .top_menu a.active, .top_menu a:hover {
 	color: #333;
@@ -813,6 +842,7 @@ a.more {
 	float:left;
 }
 #footer .col:first-child {
+	max-width: 150px;
 }
 #footer .col:last-child, #footer .last {
 	border-right: none;
@@ -1518,4 +1548,26 @@ div.accordion_content img {
 	position: absolute;
 	top: 169px;
 	left:25px;
+}
+
+
+#footer h3 a, #footer h4 a{
+    clear: both !important;
+    color: #F16522 !important;
+}
+
+.footer-table td{
+	vertical-align: top;
+}
+
+#footer ul.right {
+	float: none;
+}
+
+#footer ul.left, #footer ul.right {
+		width: 140px;
+}
+
+.client_login_link {
+	display: none;
 }
